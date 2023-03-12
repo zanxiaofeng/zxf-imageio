@@ -22,6 +22,7 @@ public class ImageIOWriterTests {
             try (OutputStream pngOutputStream = Files.newOutputStream(Paths.get("output/star.png"))) {
                 ImageIO.write(bufferedImage, "png", pngOutputStream);
             }
+            //JDK8 don't support tiff output(Need add external libraries); JDK11 is OK.
             try (OutputStream tiffOutputStream = Files.newOutputStream(Paths.get("output/star.tiff"))) {
                 ImageIO.write(bufferedImage, "tiff", tiffOutputStream);
             }
