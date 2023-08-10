@@ -11,13 +11,14 @@ import java.nio.file.Paths;
 
 public class MetaDataReaderTests {
     public static void main(String[] args) throws TiffProcessingException, IOException {
-        Metadata metadata = TiffMetadataReader.readMetadata(Paths.get("./output/developer-mozilla-org-CORS-zh.tiff").toFile());
+        Metadata metadata = TiffMetadataReader.readMetadata(
+                Paths.get("./output/developer-mozilla-org-CORS-zh.tiff").toFile());
 
         Iterable<Directory> directories = metadata.getDirectories();
         for (Directory directory : directories) {
-            System.out.println(directory);
+            System.out.println("* " + directory);
             for (Tag tag : directory.getTags()) {
-                System.out.println(tag);
+                System.out.println("\t## Tag: " + tag.getTagName() + "(" + tag.getTagType() + "), Value: " + directory.getString(tag.getTagType()));
             }
         }
     }
