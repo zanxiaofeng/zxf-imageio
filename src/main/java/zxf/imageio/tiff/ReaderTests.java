@@ -1,4 +1,4 @@
-package zxf.imageio;
+package zxf.imageio.tiff;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class ImageIOReaderTests {
+public class ReaderTests {
     public static void main(String[] args) throws IOException {
         Path tiffFilePath = Paths.get("output/developer-mozilla-org-CORS-zh.tiff");
 

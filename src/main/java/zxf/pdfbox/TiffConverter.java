@@ -1,6 +1,5 @@
 package zxf.pdfbox;
 
-import com.sun.corba.se.impl.io.IIOPOutputStream;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
 
@@ -8,12 +7,10 @@ import javax.imageio.*;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TiffConverter {
 

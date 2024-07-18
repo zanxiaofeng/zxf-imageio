@@ -39,6 +39,9 @@
 - javax.imageio.plugins.tiff.TIFFImageReadParam
 - com.sun.imageio.plugins.tiff.TIFFImageWriterSpi
 - com.sun.imageio.plugins.tiff.TIFFImageWriteParam
+- javax.imageio.metadata.IIOMetadataFormat
+- com.sun.imageio.plugins.common.StandardMetadataFormat
+- com.github.jaiimageio.impl.plugins.tiff.TIFFImageMetadata
 
 # EntryPoint
 - javax.imageio.ImageIO
