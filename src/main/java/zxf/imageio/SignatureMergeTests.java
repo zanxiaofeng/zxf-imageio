@@ -10,13 +10,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class SignatureMergeTests {
-    public static Rectangle signatureBox = new Rectangle(100, 200, 300, 100);
+    public static Rectangle signatureBox = new Rectangle(700, 1370, 1608, 837);
 
     public static void main(String[] args) throws IOException {
-        try (InputStream signatureStream = SignatureMergeTests.class.getResourceAsStream("/signature.png")) {
+        try (InputStream signatureStream = SignatureMergeTests.class.getResourceAsStream("/sign-2.png")) {
             BufferedImage signatureImage = ImageIO.read(signatureStream);
 
-            try (InputStream templateStream = SignatureMergeTests.class.getResourceAsStream("/template.png")) {
+            try (InputStream templateStream = SignatureMergeTests.class.getResourceAsStream("/template.jpg")) {
                 BufferedImage templateImage = ImageIO.read(templateStream);
 
                 Graphics2D graphics2D = templateImage.createGraphics();
@@ -24,8 +24,8 @@ public class SignatureMergeTests {
                 graphics2D.drawImage(signatureImage, drawPos.x, drawPos.y, drawPos.width, drawPos.height, null);
                 graphics2D.dispose();
 
-                try (OutputStream tiffOutputStream = Files.newOutputStream(Paths.get("output/signed.tiff"))) {
-                    ImageIO.write(templateImage, "tiff", tiffOutputStream);
+                try (OutputStream tiffOutputStream = Files.newOutputStream(Paths.get("output/signed.png"))) {
+                    ImageIO.write(templateImage, "png", tiffOutputStream);
                 }
             }
         }
