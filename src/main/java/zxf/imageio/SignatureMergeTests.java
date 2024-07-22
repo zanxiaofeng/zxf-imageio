@@ -10,10 +10,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class SignatureMergeTests {
-    public static Rectangle signatureBox = new Rectangle(700, 1370, 1608, 837);
+    public static Rectangle signatureBox = new Rectangle(426, 824, 957, 496);
 
     public static void main(String[] args) throws IOException {
-        try (InputStream signatureStream = SignatureMergeTests.class.getResourceAsStream("/sign-2.png")) {
+        try (InputStream signatureStream = SignatureMergeTests.class.getResourceAsStream("/sign-3.png")) {
             BufferedImage signatureImage = ImageIO.read(signatureStream);
 
             try (InputStream templateStream = SignatureMergeTests.class.getResourceAsStream("/template.jpg")) {
@@ -32,10 +32,13 @@ public class SignatureMergeTests {
     }
 
     private static Rectangle calculateDrawPosition(BufferedImage signatureImage, Rectangle signatureBox) {
-        double scale = Math.min(signatureImage.getWidth() / signatureBox.getWidth(), signatureImage.getHeight() / signatureBox.getHeight());
+        double scale = Math.min(signatureBox.getWidth() / signatureImage.getWidth(), signatureBox.getHeight() / signatureImage.getHeight());
         if (signatureImage.getWidth() < signatureBox.getWidth() && signatureImage.getHeight() < signatureBox.getHeight()) {
             scale = 1.0f;
         }
+
+        System.out.printf("(%f/%d, %f/%d), scale=%f", signatureBox.getWidth(),signatureImage.getWidth(),
+                signatureBox.getHeight(), signatureImage.getHeight(), scale);
 
         double dstWidth = signatureImage.getWidth() * scale;
         double dstHeight = signatureImage.getHeight() * scale;
