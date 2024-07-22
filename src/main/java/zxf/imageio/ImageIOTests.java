@@ -8,6 +8,8 @@ import java.util.Iterator;
 
 public class ImageIOTests {
     public static void main(String[] args) {
+        ImageIO.scanForPlugins();
+
         System.out.println("ReaderFormatNames:");
         Arrays.stream(ImageIO.getReaderFormatNames())
                 .map(ImageIOTests::getReaderInfoByFormatName)
@@ -43,9 +45,13 @@ public class ImageIOTests {
     private static String getReaderInfoByFormatName(String formatName) {
         StringBuilder stringBuilder = new StringBuilder(formatName);
         Iterator<ImageReader> imageReaderIterator = ImageIO.getImageReadersByFormatName(formatName);
-        while (imageReaderIterator.hasNext()){
+        while (imageReaderIterator.hasNext()) {
             stringBuilder.append(", ");
-            stringBuilder.append(imageReaderIterator.next().getClass().getName());
+            try {
+                stringBuilder.append(imageReaderIterator.next().getClass().getName());
+            } catch (Throwable ex) {
+                stringBuilder.append(ex.toString());
+            }
         }
         return stringBuilder.toString();
     }
@@ -53,9 +59,13 @@ public class ImageIOTests {
     private static String getReaderInfoBySuffix(String suffix) {
         StringBuilder stringBuilder = new StringBuilder(suffix);
         Iterator<ImageReader> imageReaderIterator = ImageIO.getImageReadersBySuffix(suffix);
-        while (imageReaderIterator.hasNext()){
+        while (imageReaderIterator.hasNext()) {
             stringBuilder.append(", ");
-            stringBuilder.append(imageReaderIterator.next().getClass().getName());
+            try {
+                stringBuilder.append(imageReaderIterator.next().getClass().getName());
+            } catch (Throwable ex) {
+                stringBuilder.append(ex.toString());
+            }
         }
         return stringBuilder.toString();
     }
@@ -63,9 +73,13 @@ public class ImageIOTests {
     private static String getReaderInfoByMIMEType(String mimeType) {
         StringBuilder stringBuilder = new StringBuilder(mimeType);
         Iterator<ImageReader> imageReaderIterator = ImageIO.getImageReadersByMIMEType(mimeType);
-        while (imageReaderIterator.hasNext()){
+        while (imageReaderIterator.hasNext()) {
             stringBuilder.append(", ");
-            stringBuilder.append(imageReaderIterator.next().getClass().getName());
+            try {
+                stringBuilder.append(imageReaderIterator.next().getClass().getName());
+            } catch (Throwable ex) {
+                stringBuilder.append(ex.toString());
+            }
         }
         return stringBuilder.toString();
     }
@@ -73,9 +87,13 @@ public class ImageIOTests {
     private static String getWriterInfoByFormatName(String formatName) {
         StringBuilder stringBuilder = new StringBuilder(formatName);
         Iterator<ImageWriter> imageWriterIterator = ImageIO.getImageWritersByFormatName(formatName);
-        while (imageWriterIterator.hasNext()){
+        while (imageWriterIterator.hasNext()) {
             stringBuilder.append(", ");
-            stringBuilder.append(imageWriterIterator.next().getClass().getName());
+            try {
+                stringBuilder.append(imageWriterIterator.next().getClass().getName());
+            } catch (Throwable ex) {
+                stringBuilder.append(ex.toString());
+            }
         }
         return stringBuilder.toString();
     }
@@ -83,9 +101,13 @@ public class ImageIOTests {
     private static String getWriterInfoBySuffix(String suffix) {
         StringBuilder stringBuilder = new StringBuilder(suffix);
         Iterator<ImageWriter> imageWriterIterator = ImageIO.getImageWritersBySuffix(suffix);
-        while (imageWriterIterator.hasNext()){
+        while (imageWriterIterator.hasNext()) {
             stringBuilder.append(", ");
-            stringBuilder.append(imageWriterIterator.next().getClass().getName());
+            try {
+                stringBuilder.append(imageWriterIterator.next().getClass().getName());
+            } catch (Throwable ex) {
+                stringBuilder.append(ex.toString());
+            }
         }
         return stringBuilder.toString();
     }
@@ -93,9 +115,13 @@ public class ImageIOTests {
     private static String getWriterInfoByMIMEType(String mimeType) {
         StringBuilder stringBuilder = new StringBuilder(mimeType);
         Iterator<ImageWriter> imageWriterIterator = ImageIO.getImageWritersByMIMEType(mimeType);
-        while (imageWriterIterator.hasNext()){
+        while (imageWriterIterator.hasNext()) {
             stringBuilder.append(", ");
-            stringBuilder.append(imageWriterIterator.next().getClass().getName());
+            try {
+                stringBuilder.append(imageWriterIterator.next().getClass().getName());
+            } catch (Throwable ex) {
+                stringBuilder.append(ex.toString());
+            }
         }
         return stringBuilder.toString();
     }
