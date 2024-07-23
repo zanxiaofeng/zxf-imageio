@@ -50,7 +50,7 @@ public class ImageIOTests {
             try {
                 stringBuilder.append(imageReaderIterator.next().getClass().getName());
             } catch (Throwable ex) {
-                stringBuilder.append(ex.toString());
+                stringBuilder.append(ex.getMessage());
             }
         }
         return stringBuilder.toString();
@@ -64,7 +64,7 @@ public class ImageIOTests {
             try {
                 stringBuilder.append(imageReaderIterator.next().getClass().getName());
             } catch (Throwable ex) {
-                stringBuilder.append(ex.toString());
+                stringBuilder.append(ex.getMessage());
             }
         }
         return stringBuilder.toString();
@@ -78,7 +78,7 @@ public class ImageIOTests {
             try {
                 stringBuilder.append(imageReaderIterator.next().getClass().getName());
             } catch (Throwable ex) {
-                stringBuilder.append(ex.toString());
+                stringBuilder.append(ex.getMessage());
             }
         }
         return stringBuilder.toString();
@@ -92,7 +92,7 @@ public class ImageIOTests {
             try {
                 stringBuilder.append(imageWriterIterator.next().getClass().getName());
             } catch (Throwable ex) {
-                stringBuilder.append(ex.toString());
+                stringBuilder.append(ex.getMessage());
             }
         }
         return stringBuilder.toString();
@@ -106,7 +106,7 @@ public class ImageIOTests {
             try {
                 stringBuilder.append(imageWriterIterator.next().getClass().getName());
             } catch (Throwable ex) {
-                stringBuilder.append(ex.toString());
+                stringBuilder.append(ex.getMessage());
             }
         }
         return stringBuilder.toString();
@@ -120,7 +120,7 @@ public class ImageIOTests {
             try {
                 stringBuilder.append(imageWriterIterator.next().getClass().getName());
             } catch (Throwable ex) {
-                stringBuilder.append(ex.toString());
+                stringBuilder.append(ex.getMessage());
             }
         }
         return stringBuilder.toString();
