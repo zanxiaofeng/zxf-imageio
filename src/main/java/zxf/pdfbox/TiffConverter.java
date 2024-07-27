@@ -28,7 +28,7 @@ public class TiffConverter {
             PDFRenderer pdfRenderer = new PDFRenderer(pdfDocument);
             multiPageTiffWriter.prepareWriteSequence(null);
             for (int pageIndex = 0; pageIndex < pdfDocument.getNumberOfPages(); pageIndex++) {
-                //Scale=200dpi/72.0f=2.777f
+                //The unit in pdf is Inch where 1 Inch = 72 dot
                 BufferedImage image = pdfRenderer.renderImageWithDPI(pageIndex, dpi);
                 IIOMetadata metadata = multiPageTiffWriter.getDefaultImageMetadata(new ImageTypeSpecifier(image), params);
                 multiPageTiffWriter.writeToSequence(new IIOImage(image, null, metadata), params);
