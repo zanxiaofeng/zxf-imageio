@@ -20,7 +20,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class SignatureMergeTests {
-    public static Rectangle signatureBox = new Rectangle((int)(1.12f * 72), (int)(1.42f * 72), (int)(3.8f * 72), (int)(0.73f * 72));
+    //In Pdf, One point equates to 1/72 of an inch.
+    public static Rectangle signatureBox = new Rectangle((int)(1.12f * 72), (int)(1.40f * 72), (int)(3.8f * 72), (int)(0.73f * 72));
 
     public static void main(String[] args) throws IOException {
         generate(Paths.get("./input/pdf-conversion-services-filled.pdf"), Paths.get("./output/pdf-conversion-services-signed.pdf"), "/IMG_20240723_081450.jpg");
@@ -32,7 +33,7 @@ public class SignatureMergeTests {
             PDPage page = pdDocument.getPage(0);
             PDImageXObject pdImage = PDImageXObject.createFromByteArray(pdDocument, signature, "signature.jpg");
             try (PDPageContentStream contentStream = new PDPageContentStream(pdDocument, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
-                contentStream.drawImage(pdImage, (float) signatureBox.getX(), (float) signatureBox.getX(), (float) signatureBox.getWidth(), (float) signatureBox.getHeight());
+                contentStream.drawImage(pdImage, (float) signatureBox.getX(), (float) signatureBox.getY(), (float) signatureBox.getWidth(), (float) signatureBox.getHeight());
             }
             pdDocument.save(pdfOutput.toFile());
         }

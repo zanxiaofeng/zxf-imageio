@@ -28,7 +28,7 @@ public class TiffConverter {
             PDFRenderer pdfRenderer = new PDFRenderer(pdfDocument);
             multiPageTiffWriter.prepareWriteSequence(null);
             for (int pageIndex = 0; pageIndex < pdfDocument.getNumberOfPages(); pageIndex++) {
-                //The unit in pdf is Inch where 1 Inch = 72 dot
+                //In Pdf, One point equates to 1/72 of an inch.
                 BufferedImage image = pdfRenderer.renderImageWithDPI(pageIndex, dpi);
                 IIOMetadata metadata = multiPageTiffWriter.getDefaultImageMetadata(new ImageTypeSpecifier(image), params);
                 multiPageTiffWriter.writeToSequence(new IIOImage(image, null, metadata), params);
