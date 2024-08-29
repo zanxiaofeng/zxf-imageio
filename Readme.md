@@ -43,5 +43,16 @@
 - com.sun.imageio.plugins.common.StandardMetadataFormat
 - com.github.jaiimageio.impl.plugins.tiff.TIFFImageMetadata
 
-# EntryPoint
+# EntryPoint of ImageIO
 - javax.imageio.ImageIO
+- 
+# metadata-extractor
+- com.drew.imaging.ImageMetadataReader*
+- com.drew.imaging.tiff.TiffMetadataReader
+- com.drew.imaging.jpeg.JpegMetadataReader
+- com.drew.imaging.webp.WebpMetadataReader
+- com.drew.metadata.Metadata
+- com.drew.metadata.Directory
+- com.drew.metadata.Tag
+- com.drew.imaging.FileTypeDetector*
+- com.drew.imaging.FileType
