@@ -17,6 +17,10 @@ public class MetadataExtractorTests {
         extractMetadata(Paths.get("./output/developer-mozilla-org-CORS-zh.tiff").toFile());
         extractMetadata(Paths.get("./output/IMG_20240723_081450-output.jpg").toFile());
         extractMetadata(Paths.get("./output/signed.png").toFile());
+        extractMetadata(Paths.get("./input/IMG_20240830_121530.jpg").toFile());
+        extractMetadata(Paths.get("./input/IMG_20240830_121622.jpg").toFile());
+        extractMetadata(Paths.get("./input/IMG_20240830_121636.jpg").toFile());
+        extractMetadata(Paths.get("./input/IMG_20240830_121652.jpg").toFile());
     }
 
     private static void extractMetadata(File file) throws ImageProcessingException, IOException {
