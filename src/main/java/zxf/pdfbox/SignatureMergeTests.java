@@ -5,6 +5,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import zxf.imageio.ImageIOWriterTests;
+import zxf.imageio.ImageOrientationCorrector;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -13,21 +14,21 @@ import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class SignatureMergeTests {
     //In Pdf, One point equates to 1/72 of an inch.
-    public static Rectangle signatureBox = new Rectangle((int)(1.12f * 72), (int)(1.40f * 72), (int)(3.8f * 72), (int)(0.73f * 72));
+    public static Rectangle signatureBox = new Rectangle((int) (1.12f * 72), (int) (1.40f * 72), (int) (3.8f * 72), (int) (0.73f * 72));
 
-    public static void main(String[] args) throws IOException {
-        generate(Paths.get("./input/pdf-conversion-services-filled.pdf"), Paths.get("./output/pdf-conversion-services-signed.pdf"), "/IMG_20240723_081450.jpg");
+    public static void main(String[] args) throws Exception {
+        //System.setProperty("java.awt.headless=", "true");
+        generate(Paths.get("./input/pdf-conversion-services-filled.pdf"), Paths.get("./output/pdf-conversion-services-signed-1.pdf"), "/IMG_20240723_081450.jpg");
+        generate(Paths.get("./input/pdf-conversion-services-filled.pdf"), Paths.get("./output/pdf-conversion-services-signed-2.pdf"), "/IMG_20240830_121636.jpg");
     }
 
-    private static void generate(Path pdfPath, Path pdfOutput, String imageFile) throws IOException {
+    private static void generate(Path pdfPath, Path pdfOutput, String imageFile) throws Exception {
         byte[] signature = extractSignatureToJPG(imageFile);
         try (PDDocument pdDocument = PDDocument.load(pdfPath.toFile())) {
             PDPage page = pdDocument.getPage(0);
@@ -39,7 +40,7 @@ public class SignatureMergeTests {
         }
     }
 
-    private static byte[] extractSignatureToJPG(String imageFile) throws IOException {
+    private static byte[] extractSignatureToJPG(String imageFile) throws Exception {
         ByteArrayOutputStream jpgOutputStream = new ByteArrayOutputStream();
         try (ImageOutputStream jpgImageOutputStream = ImageIO.createImageOutputStream(jpgOutputStream)) {
             ImageWriter jpgWriter = ImageIO.getImageWritersByFormatName("jpg").next();
@@ -59,9 +60,9 @@ public class SignatureMergeTests {
         return jpgOutputStream.toByteArray();
     }
 
-    private static BufferedImage extractImage(String imageFile) throws IOException {
+    private static BufferedImage extractImage(String imageFile) throws Exception {
         try (InputStream sourceInputStream = ImageIOWriterTests.class.getResourceAsStream(imageFile)) {
-            BufferedImage sourceImage = ImageIO.read(sourceInputStream);
+            BufferedImage sourceImage = ImageOrientationCorrector.correctImage(new BufferedInputStream(sourceInputStream));
             return sourceImage.getSubimage(0, sourceImage.getHeight() / 3, sourceImage.getWidth(), sourceImage.getHeight() / 3);
         }
     }
