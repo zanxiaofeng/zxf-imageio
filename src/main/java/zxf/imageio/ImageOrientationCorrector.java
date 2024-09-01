@@ -23,7 +23,9 @@ import java.nio.file.Paths;
 public class ImageOrientationCorrector {
     public static void main(String[] args) throws Exception {
         correctImage("/IMG_20240723_081450.jpg","./output/IMG_20240723_081450.corrected.jpg");
+        correctImage("/IMG_20240830_121622.jpg","./output/IMG_20240830_121622.corrected.jpg");
         correctImage("/IMG_20240830_121636.jpg","./output/IMG_20240830_121636.corrected.jpg");
+        correctImage("/IMG_20240830_121652.jpg","./output/IMG_20240830_121652.corrected.jpg");
     }
 
     public static void correctImage(String inputFile, String outputFile) throws Exception {

@@ -25,7 +25,9 @@ public class SignatureMergeTests {
     public static void main(String[] args) throws Exception {
         //System.setProperty("java.awt.headless=", "true");
         generate(Paths.get("./input/pdf-conversion-services-filled.pdf"), Paths.get("./output/pdf-conversion-services-signed-1.pdf"), "/IMG_20240723_081450.jpg");
-        generate(Paths.get("./input/pdf-conversion-services-filled.pdf"), Paths.get("./output/pdf-conversion-services-signed-2.pdf"), "/IMG_20240830_121636.jpg");
+        generate(Paths.get("./input/pdf-conversion-services-filled.pdf"), Paths.get("./output/pdf-conversion-services-signed-2.pdf"), "/IMG_20240830_121622.jpg");
+        generate(Paths.get("./input/pdf-conversion-services-filled.pdf"), Paths.get("./output/pdf-conversion-services-signed-3.pdf"), "/IMG_20240830_121636.jpg");
+        generate(Paths.get("./input/pdf-conversion-services-filled.pdf"), Paths.get("./output/pdf-conversion-services-signed-4.pdf"), "/IMG_20240830_121652.jpg");
     }
 
     private static void generate(Path pdfPath, Path pdfOutput, String imageFile) throws Exception {
