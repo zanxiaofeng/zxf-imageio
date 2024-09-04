@@ -26,6 +26,7 @@ public class ImageOrientationCorrector {
         correctImage("/IMG_20240830_121622.jpg","./output/IMG_20240830_121622.corrected.jpg");
         correctImage("/IMG_20240830_121636.jpg","./output/IMG_20240830_121636.corrected.jpg");
         correctImage("/IMG_20240830_121652.jpg","./output/IMG_20240830_121652.corrected.jpg");
+        correctImage("/IMG_20240904_135326.jpg","./output/IMG_20240904_135326.corrected.jpg");
     }
 
     public static void correctImage(String inputFile, String outputFile) throws Exception {
@@ -86,36 +87,46 @@ public class ImageOrientationCorrector {
 
         switch (orientation) {
             case 1:
+                System.out.println("*1*:Horizontal(normal)");
                 break;
-            case 2: // Flip X
+            case 2:
+                System.out.println("*2*:Mirror horizontal");
                 transform.scale(-1.0, 1.0);
                 transform.translate(-width, 0);
                 break;
-            case 3: // PI rotation
+            case 3:
+                System.out.println("*3*:Rotate 180");
                 transform.translate(width, height);
                 transform.rotate(Math.PI);
                 break;
-            case 4: // Flip Y
+            case 4:
+                System.out.println("*4*:Mirror vertical");
                 transform.scale(1.0, -1.0);
                 transform.translate(0, -height);
                 break;
-            case 5: // - PI/2 and Flip X
+            case 5:
+                System.out.println("*5*:Mirror horizontal and rotate 270 CW");
                 transform.rotate(-Math.PI / 2);
                 transform.scale(-1.0, 1.0);
                 break;
-            case 6: // -PI/2 and -width
+            case 6:
+                System.out.println("*6*:Rotate 90 CW");
                 transform.translate(height, 0);
                 transform.rotate(Math.PI / 2);
                 break;
-            case 7: // PI/2 and Flip
+            case 7:
+                System.out.println("*7*:Mirror horizontal and rotate 90 CW");
                 transform.scale(-1.0, 1.0);
                 transform.translate(-height, 0);
                 transform.translate(0, width);
                 transform.rotate(3 * Math.PI / 2);
                 break;
-            case 8: // PI / 2
+            case 8:
+                System.out.println("*8*:Rotate 270 CW");
                 transform.translate(0, width);
                 transform.rotate(3 * Math.PI / 2);
+                break;
+            default:
                 break;
         }
 

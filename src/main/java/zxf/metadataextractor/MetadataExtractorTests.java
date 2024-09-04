@@ -21,6 +21,7 @@ public class MetadataExtractorTests {
         extractMetadata(Paths.get("./src/main/resources/IMG_20240830_121622.jpg").toFile());
         extractMetadata(Paths.get("./src/main/resources/IMG_20240830_121636.jpg").toFile());
         extractMetadata(Paths.get("./src/main/resources/IMG_20240830_121652.jpg").toFile());
+        extractMetadata(Paths.get("./src/main/resources/IMG_20240904_135326.jpg").toFile());
     }
 
     private static void extractMetadata(File file) throws ImageProcessingException, IOException {
