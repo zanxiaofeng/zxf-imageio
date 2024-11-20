@@ -51,7 +51,7 @@ public class ImageOrientationCorrector {
     }
 
     public static BufferedImage correctImage(BufferedInputStream sourceInputStream) throws Exception {
-        sourceInputStream.mark(2000000000);
+        sourceInputStream.mark(Integer.MAX_VALUE);
         BufferedImage sourceImage = ImageIO.read(sourceInputStream);
 
         sourceInputStream.reset();
