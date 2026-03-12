@@ -4,6 +4,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.apache.pdfbox.Loader;
 import zxf.imageio.ImageIOWriterTests;
 import zxf.imageio.ImageOrientationCorrector;
 
@@ -32,7 +33,8 @@ public class SignatureMergeTests {
 
     private static void generate(Path pdfPath, Path pdfOutput, String imageFile) throws Exception {
         byte[] signature = extractSignatureToJPG(imageFile);
-        try (PDDocument pdDocument = PDDocument.load(pdfPath.toFile())) {
+        // PDFBox 3.x: 使用 Loader.loadPDF() 替代 PDDocument.load()
+        try (PDDocument pdDocument = Loader.loadPDF(pdfPath.toFile())) {
             PDPage page = pdDocument.getPage(0);
             PDImageXObject pdImage = PDImageXObject.createFromByteArray(pdDocument, signature, "signature.jpg");
             try (PDPageContentStream contentStream = new PDPageContentStream(pdDocument, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
