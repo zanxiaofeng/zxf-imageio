@@ -1,44 +1,40 @@
 package zxf.pdfbox;
 
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
-import org.apache.pdfbox.Loader;
+import zxf.utils.TIFFUtils;
 
-import javax.imageio.*;
-import javax.imageio.metadata.IIOMetadata;
-import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TiffConverter {
 
     public byte[] convertFromPdf(String pdfPath, Float dpi) throws IOException {
-        ByteArrayOutputStream tiffOutputStream = new ByteArrayOutputStream();
         File pdfFile = Paths.get(pdfPath).toFile();
-        // PDFBox 3.x: 使用 Loader.loadPDF(File) 替代 PDDocument.load(File)
-        try (PDDocument pdfDocument = Loader.loadPDF(pdfFile);
-             ImageOutputStream tiffImageOutputStream = ImageIO.createImageOutputStream(tiffOutputStream)) {
-            ImageWriter multiPageTiffWriter = ImageIO.getImageWritersByFormatName("tiff").next();
-            multiPageTiffWriter.setOutput(tiffImageOutputStream);
 
-            ImageWriteParam params = multiPageTiffWriter.getDefaultWriteParam();
-            params.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-            params.setCompressionType("LZW");
-            params.setCompressionQuality(0.8f);
-
+        try (PDDocument pdfDocument = Loader.loadPDF(pdfFile)) {
             PDFRenderer pdfRenderer = new PDFRenderer(pdfDocument);
-            multiPageTiffWriter.prepareWriteSequence(null);
+
+            List<BufferedImage> images = new ArrayList<>();
             for (int pageIndex = 0; pageIndex < pdfDocument.getNumberOfPages(); pageIndex++) {
-                //In Pdf, One point equates to 1/72 of an inch.
-                BufferedImage image = pdfRenderer.renderImageWithDPI(pageIndex, dpi);
-                IIOMetadata metadata = multiPageTiffWriter.getDefaultImageMetadata(new ImageTypeSpecifier(image), params);
-                multiPageTiffWriter.writeToSequence(new IIOImage(image, null, metadata), params);
+                images.add(pdfRenderer.renderImageWithDPI(pageIndex, dpi));
             }
-            multiPageTiffWriter.endWriteSequence();
+            System.out.printf("%d images\n", images.size());
+
+            // Write to temp file then read bytes, since TIFFUtils accepts File output
+            File tempFile = File.createTempFile("tiff-conversion-", ".tiff");
+            try {
+                TIFFUtils.writeTIFF(images, "LZW", tempFile, null, null, dpi.intValue());
+                return Files.readAllBytes(tempFile.toPath());
+            } finally {
+                tempFile.delete();
+            }
         }
-        return tiffOutputStream.toByteArray();
     }
 }

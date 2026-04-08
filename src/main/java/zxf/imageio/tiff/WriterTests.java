@@ -1,38 +1,18 @@
 package zxf.imageio.tiff;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.rendering.PDFRenderer;
 import zxf.imageio.ImageIOWriterTests;
+import zxf.utils.TIFFUtils;
 
-import javax.imageio.*;
-import javax.imageio.metadata.IIOMetadata;
-import javax.imageio.stream.ImageInputStream;
-import javax.imageio.stream.ImageOutputStream;
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class WriterTests {
     public static void main(String[] args) throws IOException {
-        ByteArrayOutputStream tiffOutputStream = new ByteArrayOutputStream();
-        try (ImageOutputStream tiffImageOutputStream = ImageIO.createImageOutputStream(tiffOutputStream)) {
-            ImageWriter tiffWriter = ImageIO.getImageWritersByFormatName("tiff").next();
-            tiffWriter.setOutput(tiffImageOutputStream);
-
-            ImageWriteParam params = tiffWriter.getDefaultWriteParam();
-            params.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-            params.setCompressionType("JPEG");
-            params.setCompressionQuality(0.8f);
-
-            BufferedImage image = extractImage();
-            tiffWriter.write(null, new IIOImage(image, null, null), params);
-            tiffWriter.dispose();
-        }
-        Files.write(Paths.get("output/IMG_20240723_081450-output.tiff"), tiffOutputStream.toByteArray());
+        TIFFUtils.writeTIFF(binaryImage(extractImage()), "CCITT T.6", Paths.get("output/IMG_20240723_081450-output.tiff").toFile(), null, null, 300);
     }
 
     private static BufferedImage extractImage() throws IOException {
@@ -40,5 +20,13 @@ public class WriterTests {
             BufferedImage sourceImage = ImageIO.read(sourceInputStream);
             return sourceImage.getSubimage(0, sourceImage.getHeight() / 3, sourceImage.getWidth(), sourceImage.getHeight() / 3);
         }
+    }
+
+    private static BufferedImage binaryImage(BufferedImage image) {
+        BufferedImage binary = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_BYTE_BINARY);
+        Graphics2D g = binary.createGraphics();
+        g.drawImage(image, 0, 0, null);
+        g.dispose();
+        return binary;
     }
 }

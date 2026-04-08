@@ -16,6 +16,7 @@ public class MetadataExtractorTests {
     public static void main(String[] args) throws ImageProcessingException, IOException {
         extractMetadata(Paths.get("./output/developer-mozilla-org-CORS-zh.tiff").toFile());
         extractMetadata(Paths.get("./output/IMG_20240723_081450-output.jpg").toFile());
+        extractMetadata(Paths.get("./output/IMG_20240723_081450-output.tiff").toFile());
         extractMetadata(Paths.get("./output/signed.png").toFile());
         extractMetadata(Paths.get("./src/main/resources/IMG_20240723_081450.jpg").toFile());
         extractMetadata(Paths.get("./src/main/resources/IMG_20240830_121622.jpg").toFile());
@@ -32,7 +33,7 @@ public class MetadataExtractorTests {
             System.out.println("* " + directory);
 
             for (Tag tag : directory.getTags()) {
-                System.out.printf("\t ## [%s - %s] %s = %s%n", directory.getName(), tag.getTagTypeHex(), tag.getTagName(), tag.getDescription());
+                System.out.printf("\t ## [%s - %s] %s = %s%n", directory.getName(), tag.getTagType(), tag.getTagName(), tag.getDescription());
             }
 
             if (directory instanceof XmpDirectory) {
