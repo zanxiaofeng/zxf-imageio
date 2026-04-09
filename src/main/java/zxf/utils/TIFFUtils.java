@@ -56,7 +56,6 @@ public class TIFFUtils {
     }
 
 
-
     private static TIFFImageWriteParam buildWriteParam(TIFFImageWriter writer, String compressionType) {
         TIFFImageWriteParam param = (TIFFImageWriteParam) writer.getDefaultWriteParam();
         param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
@@ -65,10 +64,25 @@ public class TIFFUtils {
         return param;
     }
 
+    /**
+     * Builds TIFF metadata for the given image, including copyright, description, resolution (DPI),
+     * and baseline TIFF fields (bits per sample, fill order, resolution unit).
+     *
+     * @param writer      the TIFF image writer
+     * @param image       the image to generate metadata for
+     * @param param       the write parameters (used to produce default metadata)
+     * @param copyright   optional copyright string (skipped if null)
+     * @param description optional image description (skipped if null)
+     * @param dpi         resolution in dots per inch (applied to both X and Y)
+     * @return merged IIOMetadata ready to be attached to the image
+     */
     private static IIOMetadata buildMetadata(TIFFImageWriter writer, BufferedImage image, TIFFImageWriteParam param, String copyright, String description, int dpi) throws IIOInvalidTreeException {
+        // Get default metadata from writer based on image type and compression settings
         IIOMetadata baseMetadata = writer.getDefaultImageMetadata(new ImageTypeSpecifier(image), param);
+        // Wrap into TIFFDirectory for easy field manipulation
         TIFFDirectory dir = TIFFDirectory.createFromMetadata(baseMetadata);
 
+        // Optional: Copyright tag (TIFF tag 33432)
         if (copyright != null) {
             dir.addTIFFField(new TIFFField(
                     BASELINE.getTag(BaselineTIFFTagSet.TAG_COPYRIGHT),
@@ -76,6 +90,7 @@ public class TIFFUtils {
             ));
         }
 
+        // Optional: Image description tag (TIFF tag 270)
         if (description != null) {
             dir.addTIFFField(new TIFFField(
                     BASELINE.getTag(BaselineTIFFTagSet.TAG_IMAGE_DESCRIPTION),
@@ -83,6 +98,7 @@ public class TIFFUtils {
             ));
         }
 
+        // X/Y resolution as RATIONAL (numerator/denominator), e.g. 300/1 = 300 DPI
         dir.addTIFFField(new TIFFField(
                 BASELINE.getTag(BaselineTIFFTagSet.TAG_X_RESOLUTION),
                 TIFFTag.TIFF_RATIONAL, 1, new long[][]{{dpi, 1}}
@@ -91,11 +107,23 @@ public class TIFFUtils {
                 BASELINE.getTag(BaselineTIFFTagSet.TAG_Y_RESOLUTION),
                 TIFFTag.TIFF_RATIONAL, 1, new long[][]{{dpi, 1}}
         ));
+        // Resolution unit: 2 = inch (for DPI)
         dir.addTIFFField(new TIFFField(
                 BASELINE.getTag(BaselineTIFFTagSet.TAG_RESOLUTION_UNIT),
                 TIFFTag.TIFF_SHORT, 1, new char[]{2}
         ));
+        // Bits per sample: 1 bit (bi-level / black & white)
+        dir.addTIFFField(new TIFFField(
+                BASELINE.getTag(BaselineTIFFTagSet.TAG_BITS_PER_SAMPLE),
+                TIFFTag.TIFF_SHORT, 1, new char[]{1}
+        ));
+        // Fill order: 1 = MSB-to-LSB (most significant bit first)
+        dir.addTIFFField(new TIFFField(
+                BASELINE.getTag(BaselineTIFFTagSet.TAG_FILL_ORDER),
+                TIFFTag.TIFF_SHORT, 1, new char[]{1}
+        ));
 
+        // Merge TIFF fields back into the base metadata tree
         baseMetadata.mergeTree(FORMAT_NAME, dir.getAsMetadata().getAsTree(FORMAT_NAME));
         return baseMetadata;
     }
