@@ -13,7 +13,6 @@ import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteOrder;
 import java.util.List;
@@ -56,14 +55,7 @@ public class TIFFUtils {
         }
     }
 
-    public static void check(File input) throws IOException {
-        try (FileInputStream fis = new FileInputStream(input)) {
-            byte[] header = new byte[2];
-            fis.read(header);
-            String order = new String(header, "ASCII");
-            System.out.println("Byte order: " + order + (order.equals("II") ? " (Little Endian)" : order.equals("MM") ? " (Big Endian)" : " (Unknown)"));
-        }
-    }
+
 
     private static TIFFImageWriteParam buildWriteParam(TIFFImageWriter writer, String compressionType) {
         TIFFImageWriteParam param = (TIFFImageWriteParam) writer.getDefaultWriteParam();

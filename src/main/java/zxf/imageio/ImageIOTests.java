@@ -33,7 +33,7 @@ public class ImageIOTests {
 
         System.out.println("WriterFileSuffixes:");
         Arrays.stream(ImageIO.getWriterFileSuffixes())
-                .map(ImageIOTests::getReaderInfoBySuffix)
+                .map(ImageIOTests::getWriterInfoBySuffix)
                 .forEach(System.out::println);
 
         System.out.println("WriterMIMETypes:");

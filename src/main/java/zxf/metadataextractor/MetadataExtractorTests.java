@@ -8,6 +8,7 @@ import com.drew.metadata.Tag;
 import com.drew.metadata.xmp.XmpDirectory;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Map;
@@ -28,6 +29,8 @@ public class MetadataExtractorTests {
     private static void extractMetadata(File file) throws ImageProcessingException, IOException {
         System.out.println("##: " + file.toPath());
 
+        check(file);
+
         Metadata metadata = ImageMetadataReader.readMetadata(file);
         for (Directory directory : metadata.getDirectories()) {
             System.out.println("* " + directory);
@@ -45,6 +48,15 @@ public class MetadataExtractorTests {
             for (String error : directory.getErrors()) {
                 System.err.println("\t $$ ERROR: " + error);
             }
+        }
+    }
+
+    public static void check(File input) throws IOException {
+        try (FileInputStream fis = new FileInputStream(input)) {
+            byte[] header = new byte[2];
+            fis.read(header);
+            String order = new String(header, "ASCII");
+            System.out.println("Byte order: " + order + (order.equals("II") ? " (Little Endian)" : order.equals("MM") ? " (Big Endian)" : " (Unknown)"));
         }
     }
 }
