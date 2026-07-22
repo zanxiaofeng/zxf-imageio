@@ -31,7 +31,7 @@ public class TIFFUtils {
 
             multiPageTiffWriter.prepareWriteSequence(null);
             for (BufferedImage image : images) {
-                IIOMetadata metadata = buildMetadata(multiPageTiffWriter, images.getFirst(), param, copyright, description, dpi);
+                IIOMetadata metadata = buildMetadata(multiPageTiffWriter, image, param, copyright, description, dpi);
                 multiPageTiffWriter.writeToSequence(new IIOImage(image, null, metadata), param);
             }
             multiPageTiffWriter.endWriteSequence();
@@ -65,8 +65,9 @@ public class TIFFUtils {
     }
 
     /**
-     * Builds TIFF metadata for the given image, including copyright, description, resolution (DPI),
-     * and baseline TIFF fields (bits per sample, fill order, resolution unit).
+     * Builds TIFF metadata for the given image, including copyright, description, and resolution (DPI).
+     * Bits per sample, photometric interpretation, and other pixel-format fields are left to the writer,
+     * which derives them from the image type (setting them manually is ignored / overridden).
      *
      * @param writer      the TIFF image writer
      * @param image       the image to generate metadata for
@@ -112,16 +113,8 @@ public class TIFFUtils {
                 BASELINE.getTag(BaselineTIFFTagSet.TAG_RESOLUTION_UNIT),
                 TIFFTag.TIFF_SHORT, 1, new char[]{2}
         ));
-        // Bits per sample: 1 bit (bi-level / black & white)
-        dir.addTIFFField(new TIFFField(
-                BASELINE.getTag(BaselineTIFFTagSet.TAG_BITS_PER_SAMPLE),
-                TIFFTag.TIFF_SHORT, 1, new char[]{1}
-        ));
-        // Fill order: 1 = MSB-to-LSB (most significant bit first)
-        dir.addTIFFField(new TIFFField(
-                BASELINE.getTag(BaselineTIFFTagSet.TAG_FILL_ORDER),
-                TIFFTag.TIFF_SHORT, 1, new char[]{1}
-        ));
+        // Bits per sample, photometric interpretation, and other pixel-format fields are left to the
+        // writer, which derives them from the image type (setting them manually is ignored / overridden).
 
         // Merge TIFF fields back into the base metadata tree
         baseMetadata.mergeTree(FORMAT_NAME, dir.getAsMetadata().getAsTree(FORMAT_NAME));

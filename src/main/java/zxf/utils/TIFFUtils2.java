@@ -6,6 +6,7 @@ import com.twelvemonkeys.imageio.metadata.tiff.TIFF;
 import com.twelvemonkeys.imageio.metadata.tiff.TIFFEntry;
 import com.twelvemonkeys.imageio.plugins.tiff.TIFFImageMetadata;
 import com.twelvemonkeys.imageio.plugins.tiff.TIFFImageWriteParam;
+import com.twelvemonkeys.imageio.plugins.tiff.TIFFImageWriterSpi;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -26,7 +27,7 @@ import java.util.List;
 public class TIFFUtils2 {
 
     public static void writeTIFF(List<BufferedImage> images, String compressionType, File output, String copyright, String description, int dpi) throws IOException {
-        ImageWriter writer = ImageIO.getImageWritersByFormatName("tiff").next();
+        ImageWriter writer = new TIFFImageWriterSpi().createWriterInstance();
         TIFFImageWriteParam param = buildWriteParam(writer, compressionType);
 
         try (ImageOutputStream ios = ImageIO.createImageOutputStream(output)) {
@@ -35,7 +36,7 @@ public class TIFFUtils2 {
 
             writer.prepareWriteSequence(null);
             for (BufferedImage image : images) {
-                IIOMetadata metadata = buildMetadata(writer, images.getFirst(), param, copyright, description, dpi);
+                IIOMetadata metadata = buildMetadata(writer, image, param, copyright, description, dpi);
                 writer.writeToSequence(new IIOImage(image, null, metadata), param);
             }
             writer.endWriteSequence();
@@ -45,7 +46,7 @@ public class TIFFUtils2 {
     }
 
     public static void writeTIFF(BufferedImage image, String compressionType, File output, String copyright, String description, int dpi) throws IOException {
-        ImageWriter writer = ImageIO.getImageWritersByFormatName("tiff").next();
+        ImageWriter writer = new TIFFImageWriterSpi().createWriterInstance();
         TIFFImageWriteParam param = buildWriteParam(writer, compressionType);
 
         try (ImageOutputStream ios = ImageIO.createImageOutputStream(output)) {
@@ -68,8 +69,9 @@ public class TIFFUtils2 {
     }
 
     /**
-     * Builds TIFF metadata using TwelveMonkeys API, including copyright, description, resolution (DPI),
-     * and baseline TIFF fields (bits per sample, fill order, resolution unit).
+     * Builds TIFF metadata using TwelveMonkeys API, including copyright, description, and resolution (DPI).
+     * Bits per sample, photometric interpretation, and other pixel-format fields are left to the writer,
+     * which derives them from the image type (setting them manually is ignored / overridden).
      *
      * @param writer      the ImageWriter for TIFF format
      * @param image       the image to generate metadata for
@@ -98,10 +100,6 @@ public class TIFFUtils2 {
         entries.add(new TIFFEntry(TIFF.TAG_Y_RESOLUTION, new Rational(dpi, 1)));
         // Resolution unit: 2 = inch (for DPI)
         entries.add(new TIFFEntry(TIFF.TAG_RESOLUTION_UNIT, (short) 2));
-        // Bits per sample: 1 bit (bi-level / black & white)
-        entries.add(new TIFFEntry(TIFF.TAG_BITS_PER_SAMPLE, new short[]{1}));
-        // Fill order: 1 = MSB-to-LSB (most significant bit first)
-        entries.add(new TIFFEntry(TIFF.TAG_FILL_ORDER, (short) 1));
 
         return new TIFFImageMetadata(entries);
     }
